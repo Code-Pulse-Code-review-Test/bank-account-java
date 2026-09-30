@@ -1,6 +1,7 @@
 # bank-account-java
 
-Simple bank account model: deposits, withdrawals, transfers and monthly interest.
+Simple bank account model: deposits, withdrawals, transfers, monthly interest and
+monthly statements with opening and closing balances.
 
 ```
 mvn test
