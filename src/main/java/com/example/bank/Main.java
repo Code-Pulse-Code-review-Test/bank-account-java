@@ -1,5 +1,7 @@
 package com.example.bank;
 
+import java.time.YearMonth;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -15,5 +17,8 @@ public class Main {
         System.out.println(nimal.getOwner() + ": " + nimal.getBalance());
         System.out.println(saman.getOwner() + ": " + saman.getBalance());
         System.out.println("Total: " + bank.totalDeposits());
+
+        System.out.println();
+        System.out.print(Statement.forMonth(nimal, YearMonth.now()).render());
     }
 }
