@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Account {
 
+    public static final long DAILY_WITHDRAWAL_LIMIT = 100_000;
+
     private final String number;
     private final String owner;
     private long balance;
@@ -28,8 +30,19 @@ public class Account {
         if (amount > balance) {
             throw new InsufficientFundsException(number, amount, balance);
         }
+        LocalDate today = LocalDate.now();
+        if (withdrawnOn(today) + amount > DAILY_WITHDRAWAL_LIMIT) {
+            throw new IllegalStateException("Daily withdrawal limit reached for " + number);
+        }
         balance -= amount;
-        history.add(new Transaction(Transaction.Type.WITHDRAWAL, amount, LocalDate.now()));
+        history.add(new Transaction(Transaction.Type.WITHDRAWAL, amount, today));
+    }
+
+    public long withdrawnOn(LocalDate day) {
+        return history.stream()
+                .filter(t -> t.type() == Transaction.Type.WITHDRAWAL && t.date().equals(day))
+                .mapToLong(Transaction::amount)
+                .sum();
     }
 
     public void addInterest(double monthlyRate) {

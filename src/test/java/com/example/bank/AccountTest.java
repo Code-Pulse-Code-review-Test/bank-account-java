@@ -39,4 +39,14 @@ class AccountTest {
         assertEquals(300, a.getBalance());
         assertEquals(200, b.getBalance());
     }
+
+    @Test
+    void stopsWithdrawalsOverTheDailyLimit() {
+        Account account = new Account("A1", "Test");
+        account.deposit(200_000);
+        account.withdraw(80_000);
+        assertThrows(IllegalStateException.class, () -> account.withdraw(30_000));
+        account.withdraw(20_000);
+        assertEquals(100_000, account.getBalance());
+    }
 }
